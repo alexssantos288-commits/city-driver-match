@@ -13,7 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/cadastro")({
-  validateSearch: (s: Record<string, unknown>) => ({ tipo: s.tipo === "motorista" ? ("motorista" as const) : undefined }),
+  validateSearch: (s: Record<string, unknown>) => ({ tipo: s["tipo"] === "motorista" ? ("motorista" as const) : undefined }),
   head: () => ({
     meta: [
       { title: "Criar conta — INTEGRETY DRIVER" },
@@ -41,10 +41,10 @@ function Cadastro() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!terms) return toast.error("Aceite os termos de uso e a política de privacidade.");
-    if (f.password.length < 8) return toast.error("A senha precisa ter ao menos 8 caracteres.");
-    if (!f.city_id) return toast.error("Selecione sua cidade.");
-    if (role === "driver" && (!f.cpf || !f.cnh_number || !f.cnh_category)) return toast.error("Informe CPF e dados da CNH.");
+    if (!terms) { toast.error("Aceite os termos de uso e a política de privacidade."); return; }
+    if (f.password.length < 8) { toast.error("A senha precisa ter ao menos 8 caracteres."); return; }
+    if (!f.city_id) { toast.error("Selecione sua cidade."); return; }
+    if (role === "driver" && (!f.cpf || !f.cnh_number || !f.cnh_category)) { toast.error("Informe CPF e dados da CNH."); return; }
     setBusy(true);
     const { error } = await supabase.auth.signUp({
       email: f.email,
@@ -63,7 +63,7 @@ function Cadastro() {
       },
     });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     setDone(true);
   }
 

@@ -47,12 +47,12 @@ export function SiteHeader() {
         </Link>
         <nav className="ml-auto flex items-center gap-1">
           <Button asChild variant="ghost" size="sm">
-            <Link to="/motoristas">Motoristas</Link>
+            <Link to={"/motoristas" as never}>Motoristas</Link>
           </Button>
           {user ? (
             <>
               <Button asChild variant="ghost" size="icon" aria-label="Notificações" className="relative">
-                <Link to="/notificacoes">
+                <Link to={"/notificacoes" as never}>
                   <Bell className="h-4 w-4" />
                   {unread > 0 && (
                     <span className="absolute right-1 top-1 grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-bold text-accent-foreground">
@@ -72,19 +72,19 @@ export function SiteHeader() {
                   <DropdownMenuSeparator />
                   {hasRole("passenger") && (
                     <>
-                      <DropdownMenuItem asChild><Link to="/passageiro">Minha conta</Link></DropdownMenuItem>
-                      <DropdownMenuItem asChild><Link to="/passageiro/viagens">Minhas viagens</Link></DropdownMenuItem>
-                      <DropdownMenuItem asChild><Link to="/passageiro/favoritos">Favoritos</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link to={"/passageiro" as never}>Minha conta</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link to={"/passageiro/viagens" as never}>Minhas viagens</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link to={"/passageiro/favoritos" as never}>Favoritos</Link></DropdownMenuItem>
                     </>
                   )}
                   {hasRole("driver") && (
                     <>
-                      <DropdownMenuItem asChild><Link to="/painel-motorista">Painel do motorista</Link></DropdownMenuItem>
-                      <DropdownMenuItem asChild><Link to="/painel-motorista/solicitacoes">Solicitações</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link to={"/painel-motorista" as never}>Painel do motorista</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link to={"/painel-motorista/solicitacoes" as never}>Solicitações</Link></DropdownMenuItem>
                     </>
                   )}
                   {hasRole("admin") && (
-                    <DropdownMenuItem asChild><Link to="/admin">Administração</Link></DropdownMenuItem>
+                    <DropdownMenuItem asChild><Link to={"/admin" as never}>Administração</Link></DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onSelect={signOut}>Sair</DropdownMenuItem>

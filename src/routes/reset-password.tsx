@@ -26,11 +26,11 @@ function Page() {
   const [busy, setBusy] = useState(false);
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (pw.length < 8) return toast.error("A senha precisa ter ao menos 8 caracteres.");
+    if (pw.length < 8) { toast.error("A senha precisa ter ao menos 8 caracteres."); return; }
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password: pw });
     setBusy(false);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Senha alterada.");
     navigate({ to: "/" });
   }
