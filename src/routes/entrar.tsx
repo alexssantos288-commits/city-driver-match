@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/entrar")({
-  validateSearch: (s: Record<string, unknown>) => ({ redirect: typeof s.redirect === "string" ? s.redirect : undefined }),
+  validateSearch: (s: Record<string, unknown>) => ({ redirect: typeof s["redirect"] === "string" ? (s["redirect"] as string) : undefined }),
   head: () => ({
     meta: [
       { title: "Entrar — INTEGRETY DRIVER" },
@@ -35,14 +35,14 @@ function Entrar() {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       setBusy(false);
-      return toast.error(errMsg(error));
+      { toast.error(errMsg(error)); return; }
     }
     const { data: r } = await supabase.from("user_roles").select("role").eq("user_id", data.user.id);
     const roles = (r ?? []).map((x) => x.role as Role);
     if (redirect && redirect.startsWith("/") && !redirect.startsWith("//")) {
       window.history.replaceState(null, "", redirect);
       navigate({ to: redirect as never, replace: true });
-    } else navigate({ to: homeFor(roles), replace: true });
+    } else navigate({ to: homeFor(roles) as never, replace: true });
   }
 
   return (

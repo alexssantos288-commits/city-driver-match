@@ -43,7 +43,7 @@ function Index() {
               {cities.map((c) => <SelectItem key={c.id} value={c.id}>{c.name} — {c.state}</SelectItem>)}
             </SelectContent>
           </Select>
-          <Button size="lg" className="h-11" onClick={() => navigate({ to: "/motoristas", search: city ? { cidade: city } : {} })}>
+          <Button size="lg" className="h-11" onClick={() => navigate({ to: "/motoristas" as never, search: (city ? { cidade: city } : {}) as never })}>
             Ver motoristas
           </Button>
         </div>
