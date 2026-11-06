@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, Car, Menu } from "lucide-react";
@@ -111,7 +112,7 @@ export function PageTitle({ title, subtitle }: { title: string; subtitle?: strin
   );
 }
 
-export function RoleGate({ role, children }: { role: "admin" | "driver" | "passenger"; children: React.ReactNode }) {
+export function RoleGate({ role, children }: { role: "admin" | "driver" | "passenger"; children: ReactNode }) {
   const { loading, hasRole } = useAuth();
   if (loading) return <div className="p-10 text-center text-sm text-muted-foreground">Carregando…</div>;
   if (!hasRole(role))
