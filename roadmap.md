@@ -1,5 +1,7 @@
 # INTEGRETY DRIVER — MVP 1
 
+- [ ] Corrigir a prévia preservando o aplicativo existente
+
 - [x] Banco de dados: perfis, papéis, motoristas, veículos, documentos, cidades/bairros, favoritos, solicitações, eventos, avaliações, notificações, auditoria, configurações (RLS em tudo)
 - [x] Regras no servidor: criar solicitação, aceitar/recusar/orçar, confirmar, cancelar, expirar, avançar status, avaliar, aprovação admin, suspensão
 - [x] Armazenamento privado de documentos do motorista
