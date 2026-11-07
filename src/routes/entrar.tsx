@@ -57,7 +57,7 @@ function Entrar() {
           </form>
           <div className="mt-4 flex justify-between text-sm">
             <Link to="/recuperar-senha" className="text-muted-foreground underline">Esqueci a senha</Link>
-            <Link to="/cadastro" className="font-semibold underline">Criar conta</Link>
+            <Link to="/cadastro" search={{ tipo: undefined }} className="font-semibold underline">Criar conta</Link>
           </div>
         </CardContent>
       </Card>

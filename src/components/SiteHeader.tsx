@@ -33,7 +33,7 @@ export function SiteHeader() {
     await qc.cancelQueries();
     qc.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/entrar", replace: true });
+    navigate({ to: "/entrar", search: { redirect: undefined }, replace: true });
   }
 
   return (
@@ -93,8 +93,8 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <Button asChild variant="ghost" size="sm"><Link to="/entrar">Entrar</Link></Button>
-              <Button asChild size="sm"><Link to="/cadastro">Criar conta</Link></Button>
+              <Button asChild variant="ghost" size="sm"><Link to="/entrar" search={{ redirect: undefined }}>Entrar</Link></Button>
+              <Button asChild size="sm"><Link to="/cadastro" search={{ tipo: undefined }}>Criar conta</Link></Button>
             </>
           )}
         </nav>
