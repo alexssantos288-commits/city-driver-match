@@ -22,7 +22,11 @@ import { Route as AuthenticatedPassageiroViagensRouteImport } from './routes/_au
 import { Route as AuthenticatedPainelMotoristaRouteImport } from './routes/_authenticated/painel-motorista'
 import { Route as AuthenticatedNotificacoesRouteImport } from './routes/_authenticated/notificacoes'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AuthenticatedPainelMotoristaCadastroRouteImport } from './routes/_authenticated/painel-motorista/cadastro'
+import { Route as AuthenticatedPainelMotoristaVeiculoRouteImport } from './routes/_authenticated/painel-motorista/veiculo'
 
+const AuthenticatedPainelMotoristaCadastroRoute = AuthenticatedPainelMotoristaCadastroRouteImport.update({ id: '/painel-motorista/cadastro', path: '/painel-motorista/cadastro', getParentRoute: () => AuthenticatedRouteRoute } as any)
+const AuthenticatedPainelMotoristaVeiculoRoute = AuthenticatedPainelMotoristaVeiculoRouteImport.update({ id: '/painel-motorista/veiculo', path: '/painel-motorista/veiculo', getParentRoute: () => AuthenticatedRouteRoute } as any)
 const AdminRoute = AdminRouteImport.update({ id: '/admin', path: '/admin', getParentRoute: () => rootRouteImport } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -77,6 +81,8 @@ export interface FileRoutesByFullPath {
   '/passageiro/viagens': typeof AuthenticatedPassageiroViagensRoute
   '/painel-motorista': typeof AuthenticatedPainelMotoristaRoute
   '/notificacoes': typeof AuthenticatedNotificacoesRoute
+  '/painel-motorista/cadastro': typeof AuthenticatedPainelMotoristaCadastroRoute
+  '/painel-motorista/veiculo': typeof AuthenticatedPainelMotoristaVeiculoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,6 +108,8 @@ export interface FileRoutesById {
   '/_authenticated/passageiro/viagens': typeof AuthenticatedPassageiroViagensRoute
   '/_authenticated/painel-motorista': typeof AuthenticatedPainelMotoristaRoute
   '/_authenticated/notificacoes': typeof AuthenticatedNotificacoesRoute
+  '/_authenticated/painel-motorista/cadastro': typeof AuthenticatedPainelMotoristaCadastroRoute
+  '/_authenticated/painel-motorista/veiculo': typeof AuthenticatedPainelMotoristaVeiculoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -118,6 +126,8 @@ export interface FileRouteTypes {
     | '/passageiro/viagens'
     | '/painel-motorista'
     | '/notificacoes'
+    | '/painel-motorista/cadastro'
+    | '/painel-motorista/veiculo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -132,6 +142,8 @@ export interface FileRouteTypes {
     | '/passageiro/viagens'
     | '/painel-motorista'
     | '/notificacoes'
+    | '/painel-motorista/cadastro'
+    | '/painel-motorista/veiculo'
   id:
     | '__root__'
     | '/'
@@ -142,6 +154,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/admin'
     | '/_authenticated/passageiro'
+    | '/_authenticated/painel-motorista/cadastro'
+    | '/_authenticated/painel-motorista/veiculo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -205,6 +219,8 @@ declare module '@tanstack/react-router' {
     '/motorista/$id': { id: '/motorista/$id', path: '/motorista/$id', fullPath: '/motorista/$id', preLoaderRoute: typeof MotoristaIdRouteImport, parentRoute: typeof rootRouteImport },
     '/_authenticated/painel-motorista': { id: '/_authenticated/painel-motorista', path: '/painel-motorista', fullPath: '/painel-motorista', preLoaderRoute: typeof AuthenticatedPainelMotoristaRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
     '/_authenticated/notificacoes': { id: '/_authenticated/notificacoes', path: '/notificacoes', fullPath: '/notificacoes', preLoaderRoute: typeof AuthenticatedNotificacoesRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
+    '/_authenticated/painel-motorista/cadastro': { id: '/_authenticated/painel-motorista/cadastro', path: '/painel-motorista/cadastro', fullPath: '/painel-motorista/cadastro', preLoaderRoute: typeof AuthenticatedPainelMotoristaCadastroRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
+    '/_authenticated/painel-motorista/veiculo': { id: '/_authenticated/painel-motorista/veiculo', path: '/painel-motorista/veiculo', fullPath: '/painel-motorista/veiculo', preLoaderRoute: typeof AuthenticatedPainelMotoristaVeiculoRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
     '/_authenticated/passageiro/viagens': { id: '/_authenticated/passageiro/viagens', path: '/passageiro/viagens', fullPath: '/passageiro/viagens', preLoaderRoute: typeof AuthenticatedPassageiroViagensRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
     '/_authenticated/passageiro': {
       id: '/_authenticated/passageiro'
@@ -219,6 +235,10 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedPassageiroRoute: typeof AuthenticatedPassageiroRoute
   AuthenticatedPassageiroViagensRoute: typeof AuthenticatedPassageiroViagensRoute
+  AuthenticatedPainelMotoristaRoute: typeof AuthenticatedPainelMotoristaRoute
+  AuthenticatedNotificacoesRoute: typeof AuthenticatedNotificacoesRoute
+  AuthenticatedPainelMotoristaCadastroRoute: typeof AuthenticatedPainelMotoristaCadastroRoute
+  AuthenticatedPainelMotoristaVeiculoRoute: typeof AuthenticatedPainelMotoristaVeiculoRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -226,6 +246,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPassageiroViagensRoute: AuthenticatedPassageiroViagensRoute,
   AuthenticatedPainelMotoristaRoute: AuthenticatedPainelMotoristaRoute,
   AuthenticatedNotificacoesRoute: AuthenticatedNotificacoesRoute,
+  AuthenticatedPainelMotoristaCadastroRoute: AuthenticatedPainelMotoristaCadastroRoute,
+  AuthenticatedPainelMotoristaVeiculoRoute: AuthenticatedPainelMotoristaVeiculoRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
