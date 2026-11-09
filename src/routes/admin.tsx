@@ -15,7 +15,9 @@ export const Route = createFileRoute("/admin")({ component: AdminPage });
 
 type Section = "drivers" | "documents" | "users" | "cities" | "audit";
 
-function AdminPage() {
+function AdminPage() { return <RoleGate role="admin"><AdminContent /></RoleGate>; }
+
+function AdminContent() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const [section, setSection] = useState<Section>("drivers");
@@ -124,8 +126,7 @@ function AdminPage() {
     { id: "users", label: "Usuários" }, { id: "cities", label: "Cidades" }, { id: "audit", label: "Auditoria" },
   ];
 
-  return <RoleGate role="admin">
-    <main className="mx-auto max-w-6xl px-4 py-10">
+  return <main className="mx-auto max-w-6xl px-4 py-10">
       <PageTitle title="Painel administrativo" subtitle="Controle operacional da plataforma INTEGRETY DRIVER." />
       <div className="mb-6 flex flex-wrap gap-2">
         {sections.map((s) => <Button key={s.id} size="sm" variant={section === s.id ? "default" : "outline"} onClick={() => setSection(s.id)}>{s.label}</Button>)}
@@ -173,6 +174,5 @@ function AdminPage() {
         {audit.data?.map((a: any) => <Card key={a.id}><CardContent className="p-4"><div className="flex flex-wrap justify-between gap-2"><b>{a.action}</b><span className="text-xs text-muted-foreground">{new Date(a.created_at).toLocaleString("pt-BR")}</span></div><p className="text-xs text-muted-foreground">Administrador: {a.admin_id} · Alvo: {a.target_table} {a.target_id ?? ""}</p><pre className="mt-2 overflow-auto whitespace-pre-wrap text-xs">{JSON.stringify(a.details, null, 2)}</pre></CardContent></Card>)}
         {!audit.data?.length && <Card><CardContent className="p-8 text-center text-sm text-muted-foreground">Nenhum registro de auditoria disponível.</CardContent></Card>}
       </div>}
-    </main>
-  </RoleGate>;
+    </main>;
 }
