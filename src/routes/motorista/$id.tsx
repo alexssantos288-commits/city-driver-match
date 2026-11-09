@@ -1,0 +1,27 @@
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { MapPin, Star, ShieldCheck } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+export const Route=createFileRoute("/motorista/$id")({component:DriverProfile});
+
+function DriverProfile(){
+ const {id}=Route.useParams(); const {user,hasRole}=useAuth(); const navigate=useNavigate();
+ const [f,setF]=useState({origin:"",dest:"",passengers:"1",luggage:"",notes:"",scheduled:""}); const [busy,setBusy]=useState(false);
+ const {data:driver,isLoading}=useQuery({queryKey:["driver",id],queryFn:async()=>{const {data,error}=await supabase.rpc("marketplace_drivers",{p_driver:id,p_available_only:false});if(error)throw error;return data?.[0]??null;}});
+ const {data:ratings=[]}=useQuery({queryKey:["ratings",id],queryFn:async()=>{const {data,error}=await supabase.rpc("driver_public_ratings",{p_driver:id});if(error)throw error;return data??[];}});
+ async function requestRide(e:React.FormEvent){e.preventDefault();if(!user||!hasRole("passenger")){navigate({to:"/entrar",search:{redirect:window.location.pathname}});return;}if(!f.origin||!f.dest)return;setBusy(true);const {error}=await supabase.rpc("create_ride_request",{p_driver:id,p_origin:f.origin,p_origin_lat:0,p_origin_lng:0,p_dest:f.dest,p_dest_lat:0,p_dest_lng:0,p_passengers:Number(f.passengers),p_luggage:f.luggage,p_notes:f.notes,p_scheduled_for:f.scheduled?new Date(f.scheduled).toISOString():new Date().toISOString()});setBusy(false);if(error){alert(error.message);return;}navigate({to:"/passageiro/viagens" as never});}
+ if(isLoading)return <main className="mx-auto max-w-4xl p-10 text-center">Carregando perfil...</main>;
+ if(!driver)return <main className="mx-auto max-w-4xl p-10">Motorista nao encontrado.</main>;
+ return <main className="mx-auto max-w-5xl px-4 py-10"><Link to="/motoristas" className="text-sm underline">← Voltar</Link>
+ <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_420px]"><div><Card><CardContent className="p-6"><div className="flex gap-5"><div className="grid h-24 w-24 place-items-center overflow-hidden rounded-full bg-muted">{driver.avatar_url?<img src={driver.avatar_url} className="h-full w-full object-cover" alt=""/>:<span className="text-3xl font-bold">{driver.full_name.slice(0,1)}</span>}</div><div><h1 className="font-display text-3xl font-bold">{driver.full_name}</h1><p className="mt-1 flex gap-1 text-muted-foreground"><MapPin className="h-4 w-4"/>{driver.city_name} — {driver.city_state}</p><p className="mt-2 flex gap-1"><Star className="h-4 w-4"/>{Number(driver.rating_avg||0).toFixed(1)} · {driver.rating_count} avaliacoes</p></div></div><p className="mt-6 text-muted-foreground">{driver.bio||"Motorista particular aprovado pela INTEGRETY DRIVER."}</p><div className="mt-5 flex flex-wrap gap-2">{driver.services?.map((s:string)=><span key={s} className="rounded-full bg-muted px-3 py-1 text-xs">{s}</span>)}</div><div className="mt-6 rounded-lg border p-4"><p className="text-xs text-muted-foreground">Veiculo</p><p className="font-semibold">{driver.vehicle_make} {driver.vehicle_model}</p><p className="text-sm text-muted-foreground">{driver.vehicle_year} · {driver.vehicle_color} · {driver.vehicle_seats} lugares</p></div></CardContent></Card>
+ <Card className="mt-6"><CardHeader><CardTitle>Avaliacoes recentes</CardTitle></CardHeader><CardContent className="space-y-4">{ratings.slice(0,5).map((r:any)=><div key={r.created_at+r.passenger_first_name} className="border-b pb-3"><b>★ {r.score}/5 · {r.passenger_first_name}</b><p className="text-sm text-muted-foreground">{r.comment||"Sem comentario."}</p></div>)}</CardContent></Card></div>
+ <Card><CardHeader><CardTitle>Solicitar este motorista</CardTitle></CardHeader><CardContent><form onSubmit={requestRide} className="space-y-4"><div><Label>Origem</Label><Input required value={f.origin} onChange={e=>setF({...f,origin:e.target.value})}/></div><div><Label>Destino</Label><Input required value={f.dest} onChange={e=>setF({...f,dest:e.target.value})}/></div><div className="grid grid-cols-2 gap-3"><div><Label>Passageiros</Label><Input type="number" min="1" value={f.passengers} onChange={e=>setF({...f,passengers:e.target.value})}/></div><div><Label>Data/hora</Label><Input type="datetime-local" value={f.scheduled} onChange={e=>setF({...f,scheduled:e.target.value})}/></div></div><div><Label>Bagagem</Label><Input value={f.luggage} onChange={e=>setF({...f,luggage:e.target.value})}/></div><div><Label>Observacoes</Label><Textarea value={f.notes} onChange={e=>setF({...f,notes:e.target.value})}/></div><Button className="w-full" disabled={busy}>{busy?"Enviando...":"Enviar solicitacao"}</Button><p className="text-center text-xs text-muted-foreground"><ShieldCheck className="inline h-3 w-3"/> Solicitacao direta, sem sorteio.</p></form></CardContent></Card></div></main>;
+}
