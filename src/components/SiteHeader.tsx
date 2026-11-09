@@ -24,7 +24,7 @@ export function SiteHeader() {
     enabled: !!user,
     refetchInterval: 20000,
     queryFn: async () => {
-      const { count } = await supabase.from("notifications").select("id", { count: "exact", head: true }).is("read_at", null);
+      const { count } = await supabase.from("notifications").select("id", { count: "exact", head: true }).eq("user_id", user!.id).is("read_at", null);
       return count ?? 0;
     },
   });
