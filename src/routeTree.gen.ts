@@ -51,6 +51,7 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 } as any)
 const MotoristasRoute = MotoristasRouteImport.update({ id: '/motoristas', path: '/motoristas', getParentRoute: () => rootRouteImport } as any)
 const MotoristaIdRoute = MotoristaIdRouteImport.update({ id: '/motorista/$id', path: '/motorista/$id', getParentRoute: () => rootRouteImport } as any)
+const AuthenticatedPassageiroViagensRoute = AuthenticatedPassageiroViagensRouteImport.update({ id: '/passageiro/viagens', path: '/passageiro/viagens', getParentRoute: () => AuthenticatedRouteRoute } as any)
 const AuthenticatedPassageiroRoute = AuthenticatedPassageiroRouteImport.update({
   id: '/passageiro',
   path: '/passageiro',
@@ -64,6 +65,9 @@ export interface FileRoutesByFullPath {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/passageiro': typeof AuthenticatedPassageiroRoute
+  '/motoristas': typeof MotoristasRoute
+  '/motorista/$id': typeof MotoristaIdRoute
+  '/passageiro/viagens': typeof AuthenticatedPassageiroViagensRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -82,6 +86,9 @@ export interface FileRoutesById {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/passageiro': typeof AuthenticatedPassageiroRoute
+  '/motoristas': typeof MotoristasRoute
+  '/motorista/$id': typeof MotoristaIdRoute
+  '/_authenticated/passageiro/viagens': typeof AuthenticatedPassageiroViagensRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -92,6 +99,9 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/passageiro'
+    | '/motoristas'
+    | '/motorista/$id'
+    | '/passageiro/viagens'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,9 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/passageiro'
+    | '/motoristas'
+    | '/motorista/$id'
+    | '/passageiro/viagens'
   id:
     | '__root__'
     | '/'
@@ -114,6 +127,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  MotoristasRoute: typeof MotoristasRoute
+  MotoristaIdRoute: typeof MotoristaIdRoute
   CadastroRoute: typeof CadastroRoute
   EntrarRoute: typeof EntrarRoute
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
@@ -164,6 +179,9 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/motoristas': { id: '/motoristas', path: '/motoristas', fullPath: '/motoristas', preLoaderRoute: typeof MotoristasRouteImport, parentRoute: typeof rootRouteImport },
+    '/motorista/$id': { id: '/motorista/$id', path: '/motorista/$id', fullPath: '/motorista/$id', preLoaderRoute: typeof MotoristaIdRouteImport, parentRoute: typeof rootRouteImport },
+    '/_authenticated/passageiro/viagens': { id: '/_authenticated/passageiro/viagens', path: '/passageiro/viagens', fullPath: '/passageiro/viagens', preLoaderRoute: typeof AuthenticatedPassageiroViagensRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
     '/_authenticated/passageiro': {
       id: '/_authenticated/passageiro'
       path: '/passageiro'
@@ -187,7 +205,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-const AuthenticatedPassageiroViagensRoute = AuthenticatedPassageiroViagensRouteImport.update({ id: '/passageiro/viagens', path: '/passageiro/viagens', getParentRoute: () => AuthenticatedRouteRoute } as any)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
