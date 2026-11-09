@@ -73,5 +73,5 @@ export function useAuth() {
 export function homeFor(roles: Role[]): "/admin" | "/painel-motorista" | "/motoristas" {
   if (roles.includes("admin")) return "/admin";
   if (roles.includes("driver")) return "/painel-motorista";
-  return "/motoristas";
+  return "/passageiro";
 }
