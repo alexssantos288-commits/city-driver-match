@@ -16,6 +16,9 @@ import { Route as EntrarRouteImport } from './routes/entrar'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedPassageiroRouteImport } from './routes/_authenticated/passageiro'
+import { Route as MotoristasRouteImport } from './routes/motoristas'
+import { Route as MotoristaIdRouteImport } from './routes/motorista/$id'
+import { Route as AuthenticatedPassageiroViagensRouteImport } from './routes/_authenticated/passageiro/viagens'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +49,8 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MotoristasRoute = MotoristasRouteImport.update({ id: '/motoristas', path: '/motoristas', getParentRoute: () => rootRouteImport } as any)
+const MotoristaIdRoute = MotoristaIdRouteImport.update({ id: '/motorista/$id', path: '/motorista/$id', getParentRoute: () => rootRouteImport } as any)
 const AuthenticatedPassageiroRoute = AuthenticatedPassageiroRouteImport.update({
   id: '/passageiro',
   path: '/passageiro',
@@ -171,15 +176,18 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedPassageiroRoute: typeof AuthenticatedPassageiroRoute
+  AuthenticatedPassageiroViagensRoute: typeof AuthenticatedPassageiroViagensRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPassageiroRoute: AuthenticatedPassageiroRoute,
+  AuthenticatedPassageiroViagensRoute: AuthenticatedPassageiroViagensRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+const AuthenticatedPassageiroViagensRoute = AuthenticatedPassageiroViagensRouteImport.update({ id: '/passageiro/viagens', path: '/passageiro/viagens', getParentRoute: () => AuthenticatedRouteRoute } as any)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -187,6 +195,8 @@ const rootRouteChildren: RootRouteChildren = {
   EntrarRoute: EntrarRoute,
   RecuperarSenhaRoute: RecuperarSenhaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  MotoristasRoute: MotoristasRoute,
+  MotoristaIdRoute: MotoristaIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
