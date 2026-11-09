@@ -1,5 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Star, MapPin, Car, Heart } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/passageiro")({
-  component: () => <main className="mx-auto max-w-6xl px-4 py-10"><h1 className="font-display text-2xl font-bold">Minha conta</h1></main>,
-});
+export const Route=createFileRoute("/_authenticated/passageiro")({component:Page});
+function Page(){
+ const {user,profile}=useAuth();
+ const {data:favorites=[],refetch}=useQuery({queryKey:["favorites",user?.id],enabled:!!user,queryFn:async()=>{const {data,error}=await supabase.from("favorites").select("driver_id").eq("passenger_id",user!.id);if(error)throw error;return data??[];}});
+ const ids=favorites.map((x:any)=>x.driver_id);
+ const {data:drivers=[]}=useQuery({queryKey:["favorite-drivers",ids],enabled:ids.length>0,queryFn:async()=>{const {data,error}=await supabase.rpc("marketplace_drivers",{p_driver_ids:ids,p_available_only:false});if(error)throw error;return data??[];}});
+ async function remove(id:string){await supabase.from("favorites").delete().eq("passenger_id",user!.id).eq("driver_id",id);refetch();}
+ return <main className="mx-auto max-w-6xl px-4 py-10"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm text-muted-foreground">Olá, {profile?.full_name||"passageiro"}</p><h1 className="font-display text-3xl font-bold">Sua área</h1><p className="mt-2 text-muted-foreground">Encontre seu motorista de confiança e acompanhe suas viagens.</p></div><Button asChild><Link to="/motoristas">Encontrar motorista</Link></Button></div><div className="mt-8 grid gap-4 sm:grid-cols-3"><Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Motoristas favoritos</p><p className="mt-2 text-3xl font-bold">{favorites.length}</p></CardContent></Card><Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Atalho</p><Button variant="link" className="px-0" asChild><Link to="/passageiro/viagens">Minhas viagens →</Link></Button></CardContent></Card><Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Marketplace</p><Button variant="link" className="px-0" asChild><Link to="/motoristas">Ver motoristas →</Link></Button></CardContent></Card></div><Card className="mt-8"><CardHeader><CardTitle><Heart className="mr-2 inline h-5 w-5"/>Motoristas favoritos</CardTitle></CardHeader><CardContent>{drivers.length?<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">{drivers.map((d:any)=><div key={d.driver_id} className="rounded-xl border p-4"><div className="flex gap-3"><div className="grid h-14 w-14 place-items-center rounded-full bg-muted overflow-hidden">{d.avatar_url?<img src={d.avatar_url} className="h-full w-full object-cover" alt=""/>:<b>{d.full_name?.slice(0,1)}</b>}</div><div><b>{d.full_name}</b><p className="flex text-xs text-muted-foreground"><MapPin className="mr-1 h-3 w-3"/>{d.city_name} — {d.city_state}</p><p className="flex text-xs"><Star className="mr-1 h-3 w-3"/> {Number(d.rating_avg||0).toFixed(1)}</p></div></div><p className="mt-3 text-xs text-muted-foreground"><Car className="mr-1 inline h-3 w-3"/>{d.vehicle_make} {d.vehicle_model}</p><div className="mt-4 flex gap-2"><Button size="sm" className="flex-1" asChild><Link to="/motorista/$id" params={{id:d.driver_id}}>Solicitar</Link></Button><Button size="sm" variant="outline" onClick={()=>remove(d.driver_id)}>Remover</Button></div></div>)}</div>:<div className="py-8 text-center text-sm text-muted-foreground">Você ainda não favoritou nenhum motorista.<br/><Button variant="link" asChild><Link to="/motoristas">Explorar motoristas</Link></Button></div>}</CardContent></Card></main>;
+}
