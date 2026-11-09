@@ -92,6 +92,13 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AdminRoute
   '/passageiro': typeof AuthenticatedPassageiroRoute
+  '/motoristas': typeof MotoristasRoute
+  '/motorista/$id': typeof MotoristaIdRoute
+  '/passageiro/viagens': typeof AuthenticatedPassageiroViagensRoute
+  '/painel-motorista': typeof AuthenticatedPainelMotoristaRoute
+  '/notificacoes': typeof AuthenticatedNotificacoesRoute
+  '/painel-motorista/cadastro': typeof AuthenticatedPainelMotoristaCadastroRoute
+  '/painel-motorista/veiculo': typeof AuthenticatedPainelMotoristaVeiculoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -218,6 +225,8 @@ declare module '@tanstack/react-router' {
     '/motoristas': { id: '/motoristas', path: '/motoristas', fullPath: '/motoristas', preLoaderRoute: typeof MotoristasRouteImport, parentRoute: typeof rootRouteImport },
     '/motorista/$id': { id: '/motorista/$id', path: '/motorista/$id', fullPath: '/motorista/$id', preLoaderRoute: typeof MotoristaIdRouteImport, parentRoute: typeof rootRouteImport },
     '/_authenticated/painel-motorista': { id: '/_authenticated/painel-motorista', path: '/painel-motorista', fullPath: '/painel-motorista', preLoaderRoute: typeof AuthenticatedPainelMotoristaRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
+    '/_authenticated/painel-motorista/cadastro': { id: '/_authenticated/painel-motorista/cadastro', path: '/painel-motorista/cadastro', fullPath: '/painel-motorista/cadastro', preLoaderRoute: typeof AuthenticatedPainelMotoristaCadastroRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
+    '/_authenticated/painel-motorista/veiculo': { id: '/_authenticated/painel-motorista/veiculo', path: '/painel-motorista/veiculo', fullPath: '/painel-motorista/veiculo', preLoaderRoute: typeof AuthenticatedPainelMotoristaVeiculoRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
     '/_authenticated/notificacoes': { id: '/_authenticated/notificacoes', path: '/notificacoes', fullPath: '/notificacoes', preLoaderRoute: typeof AuthenticatedNotificacoesRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
     '/_authenticated/painel-motorista/cadastro': { id: '/_authenticated/painel-motorista/cadastro', path: '/painel-motorista/cadastro', fullPath: '/painel-motorista/cadastro', preLoaderRoute: typeof AuthenticatedPainelMotoristaCadastroRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
     '/_authenticated/painel-motorista/veiculo': { id: '/_authenticated/painel-motorista/veiculo', path: '/painel-motorista/veiculo', fullPath: '/painel-motorista/veiculo', preLoaderRoute: typeof AuthenticatedPainelMotoristaVeiculoRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
