@@ -1,0 +1,9 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
+import { RoleGate, PageTitle } from "@/components/SiteHeader";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+export const Route=createFileRoute("/_authenticated/painel-motorista")({component:Page});
+function Page(){const {user}=useAuth();const {data:rides=[]}=useQuery({queryKey:["driver-rides",user?.id],enabled:!!user,queryFn:async()=>{const {data,error}=await supabase.from("ride_requests").select("id,status,origin_address,dest_address,created_at,passenger_id").eq("driver_id",user!.id).order("created_at",{ascending:false}).limit(10);if(error)throw error;return data??[];}});return <RoleGate role="driver"><main className="mx-auto max-w-6xl px-4 py-10"><PageTitle title="Painel do motorista" subtitle="Acompanhe solicitacoes e o estado do seu cadastro."/><div className="grid gap-4 md:grid-cols-3"><Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Solicitacoes</p><p className="mt-2 text-3xl font-bold">{rides.length}</p></CardContent></Card><Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Perfil</p><p className="mt-2 font-semibold">Em gestao</p></CardContent></Card><Card><CardContent className="p-5"><p className="text-sm text-muted-foreground">Marketplace</p><p className="mt-2 font-semibold">Ativo</p></CardContent></Card></div><Card className="mt-6"><CardHeader><CardTitle>Solicitacoes recentes</CardTitle></CardHeader><CardContent className="space-y-3">{rides.length?rides.map((r:any)=><div key={r.id} className="flex justify-between gap-3 border-b pb-3 text-sm"><span>{r.origin_address} → {r.dest_address}</span><b>{r.status}</b></div>):<p className="text-sm text-muted-foreground">Nenhuma solicitacao no momento.</p>}</CardContent></Card></main></RoleGate>}
