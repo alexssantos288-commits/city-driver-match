@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -19,7 +19,7 @@ function Page(){
  const {data:vehicle}=useQuery({queryKey:["driver-vehicle",user?.id],enabled:!!user,queryFn:async()=>{const {data,error}=await supabase.from("vehicles").select("*").eq("driver_id",user!.id).eq("is_active",true).maybeSingle();if(error)throw error;return data;}});
  const {data:rides=[],refetch:refetchRides}=useQuery({queryKey:["driver-rides",user?.id],enabled:!!user,queryFn:async()=>{const {data,error}=await supabase.from("ride_requests").select("id,status,origin_address,dest_address,created_at,passengers,notes,quoted_price,agreed_price,scheduled_for,passenger_id").eq("driver_id",user!.id).order("created_at",{ascending:false}).limit(20);if(error)throw error;return data??[];}});
  const [form,setForm]=useState({bio:profile?.bio??"",experience_years:String(profile?.experience_years??""),availability:profile?.availability??"offline",base_fare:String(profile?.base_fare??""),price_per_km:String(profile?.price_per_km??""),pricing_mode:profile?.pricing_mode??"quote",pricing_notes:profile?.pricing_notes??""});
- if(profile && form.bio==="" && profile.bio) setForm({...form,bio:profile.bio,experience_years:String(profile.experience_years??""),availability:profile.availability,base_fare:String(profile.base_fare??""),price_per_km:String(profile.price_per_km??""),pricing_mode:profile.pricing_mode,pricing_notes:profile.pricing_notes??""});
+ useEffect(()=>{if(profile)setForm({bio:profile.bio??"",experience_years:String(profile.experience_years??""),availability:profile.availability,base_fare:String(profile.base_fare??""),price_per_km:String(profile.price_per_km??""),pricing_mode:profile.pricing_mode,pricing_notes:profile.pricing_notes??""});},[profile]);
  async function save(){setBusy(true);const {error}=await supabase.from("driver_profiles").update({bio:form.bio,experience_years:Number(form.experience_years)||null,availability:form.availability as any,base_fare:Number(form.base_fare)||null,price_per_km:Number(form.price_per_km)||null,pricing_mode:form.pricing_mode as any,pricing_notes:form.pricing_notes||null}).eq("id",user!.id);setBusy(false);if(error)toast.error(error.message);else{toast.success("Perfil atualizado");refetch();}}
  async function respond(id:string,action:string){setBusy(true);const {error}=await supabase.rpc("driver_respond_ride",{p_ride:id,p_action:action,p_price:action==="quote"?Number(window.prompt("Valor da corrida (R$):")||0):undefined,p_reason:action==="decline"?window.prompt("Motivo da recusa:")||undefined:undefined});setBusy(false);if(error)toast.error(error.message);else{toast.success("Solicitação atualizada");refetchRides();}}
  async function advance(id:string,to:any){const {error}=await supabase.rpc("driver_advance_ride",{p_ride:id,p_to:to});if(error)toast.error(error.message);else refetchRides();}
