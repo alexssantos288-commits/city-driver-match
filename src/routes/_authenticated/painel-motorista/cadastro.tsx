@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -14,8 +14,9 @@ export const Route=createFileRoute("/_authenticated/painel-motorista/cadastro")(
 function Page(){
  const {user}=useAuth(); const [busy,setBusy]=useState(false);
  const {data:profile}=useQuery({queryKey:["driver-private-profile",user?.id],enabled:!!user,queryFn:async()=>{const {data,error}=await supabase.from("driver_private").select("*").eq("driver_id",user!.id).maybeSingle();if(error)throw error;return data;}});
- const [f,setF]=useState({cpf:"",cnh_number:"",cnh_category:""}); 
+ const [f,setF]=useState({cpf:"",cnh_number:"",cnh_category:""});
+ useEffect(()=>{if(profile)setF({cpf:profile.cpf,cnh_number:profile.cnh_number,cnh_category:profile.cnh_category});},[profile]); 
  async function save(){setBusy(true);const {error}=await supabase.from("driver_private").upsert({driver_id:user!.id,...f},{onConflict:"driver_id"});setBusy(false);if(error)toast.error(error.message);else toast.success("Dados salvos.");}
  async function submit(){setBusy(true);const {error}=await supabase.rpc("submit_driver_for_review");setBusy(false);if(error)toast.error(error.message);else toast.success("Cadastro enviado para análise da equipe.");}
- return <RoleGate role="driver"><main className="mx-auto max-w-3xl px-4 py-10"><PageTitle title="Cadastro do motorista" subtitle="Complete os dados necessários para análise e aprovação."/><Card><CardHeader><CardTitle>Documentação</CardTitle></CardHeader><CardContent className="space-y-4"><div><Label>CPF</Label><Input value={f.cpf||profile?.cpf||""} onChange={e=>setF({...f,cpf:e.target.value})}/></div><div><Label>CNH</Label><Input value={f.cnh_number||profile?.cnh_number||""} onChange={e=>setF({...f,cnh_number:e.target.value})}/></div><div><Label>Categoria da CNH</Label><Input value={f.cnh_category||profile?.cnh_category||""} onChange={e=>setF({...f,cnh_category:e.target.value})}/></div><div className="flex flex-wrap gap-2"><Button onClick={save} disabled={busy}>{busy?"Salvando...":"Salvar dados"}</Button><Button variant="outline" onClick={submit} disabled={busy}>Enviar cadastro para análise</Button></div><p className="text-xs text-muted-foreground">Antes de enviar, confira seus dados e cadastre também o veículo. O envio não substitui a análise dos documentos obrigatórios.</p></CardContent></Card></main></RoleGate>;
+ return <RoleGate role="driver"><main className="mx-auto max-w-3xl px-4 py-10"><PageTitle title="Cadastro do motorista" subtitle="Complete os dados necessários para análise e aprovação."/><Card><CardHeader><CardTitle>Documentação</CardTitle></CardHeader><CardContent className="space-y-4"><div><Label>CPF</Label><Input value={f.cpf} onChange={e=>setF({...f,cpf:e.target.value})}/></div><div><Label>CNH</Label><Input value={f.cnh_number} onChange={e=>setF({...f,cnh_number:e.target.value})}/></div><div><Label>Categoria da CNH</Label><Input value={f.cnh_category} onChange={e=>setF({...f,cnh_category:e.target.value})}/></div><div className="flex flex-wrap gap-2"><Button onClick={save} disabled={busy}>{busy?"Salvando...":"Salvar dados"}</Button><Button variant="outline" onClick={submit} disabled={busy}>Enviar cadastro para análise</Button></div><p className="text-xs text-muted-foreground">Antes de enviar, confira seus dados e cadastre também o veículo. O envio não substitui a análise dos documentos obrigatórios.</p></CardContent></Card></main></RoleGate>;
 }
