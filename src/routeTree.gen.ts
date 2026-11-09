@@ -21,7 +21,9 @@ import { Route as MotoristaIdRouteImport } from './routes/motorista/$id'
 import { Route as AuthenticatedPassageiroViagensRouteImport } from './routes/_authenticated/passageiro/viagens'
 import { Route as AuthenticatedPainelMotoristaRouteImport } from './routes/_authenticated/painel-motorista'
 import { Route as AuthenticatedNotificacoesRouteImport } from './routes/_authenticated/notificacoes'
+import { Route as AdminRouteImport } from './routes/admin'
 
+const AdminRoute = AdminRouteImport.update({ id: '/admin', path: '/admin', getParentRoute: () => rootRouteImport } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -68,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/entrar': typeof EntrarRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AdminRoute
   '/passageiro': typeof AuthenticatedPassageiroRoute
   '/motoristas': typeof MotoristasRoute
   '/motorista/$id': typeof MotoristaIdRoute
@@ -81,6 +84,7 @@ export interface FileRoutesByTo {
   '/entrar': typeof EntrarRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AdminRoute
   '/passageiro': typeof AuthenticatedPassageiroRoute
 }
 export interface FileRoutesById {
@@ -91,6 +95,7 @@ export interface FileRoutesById {
   '/entrar': typeof EntrarRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AdminRoute
   '/_authenticated/passageiro': typeof AuthenticatedPassageiroRoute
   '/motoristas': typeof MotoristasRoute
   '/motorista/$id': typeof MotoristaIdRoute
@@ -106,6 +111,7 @@ export interface FileRouteTypes {
     | '/entrar'
     | '/recuperar-senha'
     | '/reset-password'
+    | '/admin'
     | '/passageiro'
     | '/motoristas'
     | '/motorista/$id'
@@ -119,6 +125,7 @@ export interface FileRouteTypes {
     | '/entrar'
     | '/recuperar-senha'
     | '/reset-password'
+    | '/admin'
     | '/passageiro'
     | '/motoristas'
     | '/motorista/$id'
@@ -133,6 +140,7 @@ export interface FileRouteTypes {
     | '/entrar'
     | '/recuperar-senha'
     | '/reset-password'
+    | '/admin'
     | '/_authenticated/passageiro'
   fileRoutesById: FileRoutesById
 }
@@ -145,6 +153,7 @@ export interface RootRouteChildren {
   EntrarRoute: typeof EntrarRoute
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  AdminRoute: typeof AdminRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -191,6 +200,7 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': { id: '/admin', path: '/admin', fullPath: '/admin', preLoaderRoute: typeof AdminRouteImport, parentRoute: typeof rootRouteImport }
     '/motoristas': { id: '/motoristas', path: '/motoristas', fullPath: '/motoristas', preLoaderRoute: typeof MotoristasRouteImport, parentRoute: typeof rootRouteImport },
     '/motorista/$id': { id: '/motorista/$id', path: '/motorista/$id', fullPath: '/motorista/$id', preLoaderRoute: typeof MotoristaIdRouteImport, parentRoute: typeof rootRouteImport },
     '/_authenticated/painel-motorista': { id: '/_authenticated/painel-motorista', path: '/painel-motorista', fullPath: '/painel-motorista', preLoaderRoute: typeof AuthenticatedPainelMotoristaRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
@@ -228,6 +238,7 @@ const rootRouteChildren: RootRouteChildren = {
   EntrarRoute: EntrarRoute,
   RecuperarSenhaRoute: RecuperarSenhaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  AdminRoute: AdminRoute,
   MotoristasRoute: MotoristasRoute,
   MotoristaIdRoute: MotoristaIdRoute,
 }
