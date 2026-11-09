@@ -19,6 +19,8 @@ import { Route as AuthenticatedPassageiroRouteImport } from './routes/_authentic
 import { Route as MotoristasRouteImport } from './routes/motoristas'
 import { Route as MotoristaIdRouteImport } from './routes/motorista/$id'
 import { Route as AuthenticatedPassageiroViagensRouteImport } from './routes/_authenticated/passageiro/viagens'
+import { Route as AuthenticatedPainelMotoristaRouteImport } from './routes/_authenticated/painel-motorista'
+import { Route as AuthenticatedNotificacoesRouteImport } from './routes/_authenticated/notificacoes'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -51,6 +53,8 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 } as any)
 const MotoristasRoute = MotoristasRouteImport.update({ id: '/motoristas', path: '/motoristas', getParentRoute: () => rootRouteImport } as any)
 const MotoristaIdRoute = MotoristaIdRouteImport.update({ id: '/motorista/$id', path: '/motorista/$id', getParentRoute: () => rootRouteImport } as any)
+const AuthenticatedPainelMotoristaRoute = AuthenticatedPainelMotoristaRouteImport.update({ id: '/painel-motorista', path: '/painel-motorista', getParentRoute: () => AuthenticatedRouteRoute } as any)
+const AuthenticatedNotificacoesRoute = AuthenticatedNotificacoesRouteImport.update({ id: '/notificacoes', path: '/notificacoes', getParentRoute: () => AuthenticatedRouteRoute } as any)
 const AuthenticatedPassageiroViagensRoute = AuthenticatedPassageiroViagensRouteImport.update({ id: '/passageiro/viagens', path: '/passageiro/viagens', getParentRoute: () => AuthenticatedRouteRoute } as any)
 const AuthenticatedPassageiroRoute = AuthenticatedPassageiroRouteImport.update({
   id: '/passageiro',
@@ -68,6 +72,8 @@ export interface FileRoutesByFullPath {
   '/motoristas': typeof MotoristasRoute
   '/motorista/$id': typeof MotoristaIdRoute
   '/passageiro/viagens': typeof AuthenticatedPassageiroViagensRoute
+  '/painel-motorista': typeof AuthenticatedPainelMotoristaRoute
+  '/notificacoes': typeof AuthenticatedNotificacoesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -89,6 +95,8 @@ export interface FileRoutesById {
   '/motoristas': typeof MotoristasRoute
   '/motorista/$id': typeof MotoristaIdRoute
   '/_authenticated/passageiro/viagens': typeof AuthenticatedPassageiroViagensRoute
+  '/_authenticated/painel-motorista': typeof AuthenticatedPainelMotoristaRoute
+  '/_authenticated/notificacoes': typeof AuthenticatedNotificacoesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -102,6 +110,8 @@ export interface FileRouteTypes {
     | '/motoristas'
     | '/motorista/$id'
     | '/passageiro/viagens'
+    | '/painel-motorista'
+    | '/notificacoes'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -113,6 +123,8 @@ export interface FileRouteTypes {
     | '/motoristas'
     | '/motorista/$id'
     | '/passageiro/viagens'
+    | '/painel-motorista'
+    | '/notificacoes'
   id:
     | '__root__'
     | '/'
@@ -181,6 +193,8 @@ declare module '@tanstack/react-router' {
     }
     '/motoristas': { id: '/motoristas', path: '/motoristas', fullPath: '/motoristas', preLoaderRoute: typeof MotoristasRouteImport, parentRoute: typeof rootRouteImport },
     '/motorista/$id': { id: '/motorista/$id', path: '/motorista/$id', fullPath: '/motorista/$id', preLoaderRoute: typeof MotoristaIdRouteImport, parentRoute: typeof rootRouteImport },
+    '/_authenticated/painel-motorista': { id: '/_authenticated/painel-motorista', path: '/painel-motorista', fullPath: '/painel-motorista', preLoaderRoute: typeof AuthenticatedPainelMotoristaRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
+    '/_authenticated/notificacoes': { id: '/_authenticated/notificacoes', path: '/notificacoes', fullPath: '/notificacoes', preLoaderRoute: typeof AuthenticatedNotificacoesRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
     '/_authenticated/passageiro/viagens': { id: '/_authenticated/passageiro/viagens', path: '/passageiro/viagens', fullPath: '/passageiro/viagens', preLoaderRoute: typeof AuthenticatedPassageiroViagensRouteImport, parentRoute: typeof AuthenticatedRouteRoute },
     '/_authenticated/passageiro': {
       id: '/_authenticated/passageiro'
@@ -200,6 +214,8 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPassageiroRoute: AuthenticatedPassageiroRoute,
   AuthenticatedPassageiroViagensRoute: AuthenticatedPassageiroViagensRoute,
+  AuthenticatedPainelMotoristaRoute: AuthenticatedPainelMotoristaRoute,
+  AuthenticatedNotificacoesRoute: AuthenticatedNotificacoesRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
